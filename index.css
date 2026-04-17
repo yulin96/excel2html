@@ -602,6 +602,11 @@ body {
 .preview-frame h4 { font-size: 1em; margin: 1em 0; }
 .preview-frame p { margin: 0.5em 0; }
 .preview-frame ul, .preview-frame ol { margin: 0.5em 0; padding-left: 2em; }
+.preview-frame ul { list-style-type: disc; }
+.preview-frame ol { list-style-type: decimal; }
+.preview-frame li { margin: 0.25em 0; }
+.preview-frame ul ul, .preview-frame ol ul { list-style-type: circle; margin-bottom: 0; }
+.preview-frame ul ul ul, .preview-frame ol ol ul { list-style-type: square; }
 .preview-frame table { border-collapse: collapse; margin: 1em 0; width: 100%; }
 .preview-frame th, .preview-frame td { border: 1px solid var(--preview-border); padding: 8px 12px; text-align: left; }
 .preview-frame th { background: var(--preview-th-bg); font-weight: 600; }

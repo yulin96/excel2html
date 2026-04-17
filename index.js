@@ -21,6 +21,7 @@
   const outputPlaceholder = document.getElementById('outputPlaceholder');
   const sourceCode = document.getElementById('sourceCode');
   const btnCopy = document.getElementById('btnCopy');
+  const btnCopyCss = document.getElementById('btnCopyCss');
   const btnDownload = document.getElementById('btnDownload');
   const messagesBar = document.getElementById('messagesBar');
   const messagesCount = document.getElementById('messagesCount');
@@ -395,7 +396,26 @@
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
-      showToast('已复制到剪贴板', 'success');
+    });
+  });
+
+  const tailwindFixCss = `.preview-frame ul { list-style-type: disc; }
+.preview-frame ol { list-style-type: decimal; }
+.preview-frame li { margin: 0.25em 0; }
+.preview-frame ul ul, .preview-frame ol ul { list-style-type: circle; margin-bottom: 0; }
+.preview-frame ul ul ul, .preview-frame ol ol ul { list-style-type: square; }`;
+
+  btnCopyCss.addEventListener('click', () => {
+    navigator.clipboard.writeText(tailwindFixCss).then(() => {
+      showToast('已复制 Tailwind 修复 CSS', 'success');
+    }).catch(() => {
+      const textarea = document.createElement('textarea');
+      textarea.value = tailwindFixCss;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      showToast('已复制 Tailwind 修复 CSS', 'success');
     });
   });
 
