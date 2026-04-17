@@ -27,6 +27,32 @@
   const messagesList = document.getElementById('messagesList');
   const loadingOverlay = document.getElementById('loadingOverlay');
   const toast = document.getElementById('toast');
+  const btnTheme = document.getElementById('btnTheme');
+
+  // ===== Theme =====
+  function initTheme() {
+    const saved = localStorage.getItem('docx2html-theme');
+    // 默认浅色，只有明确保存了 dark 才用暗色
+    if (saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('docx2html-theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('docx2html-theme', 'dark');
+    }
+  }
+
+  initTheme();
+  btnTheme.addEventListener('click', toggleTheme);
 
   // ===== State =====
   let currentFile = null;

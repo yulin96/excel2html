@@ -1,5 +1,47 @@
 /* ===== CSS Variables & Reset ===== */
+
+/* 浅色主题（默认） */
 :root {
+  --bg-primary: #f5f5f7;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f0f0f3;
+  --bg-elevated: #ffffff;
+  --bg-hover: #e8e8ee;
+  --border: #d8d8e0;
+  --border-focus: #6366f1;
+  --text-primary: #1a1a2e;
+  --text-secondary: #5c5c72;
+  --text-muted: #8e8ea0;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-subtle: rgba(99, 102, 241, 0.08);
+  --accent-glow: rgba(99, 102, 241, 0.18);
+  --success: #16a34a;
+  --success-subtle: rgba(22, 163, 74, 0.08);
+  --warning: #d97706;
+  --warning-subtle: rgba(217, 119, 6, 0.08);
+  --error: #dc2626;
+  --error-subtle: rgba(220, 38, 38, 0.08);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --code-bg: #f6f8fa;
+  --code-text: #24292f;
+  --loading-backdrop: rgba(245, 245, 247, 0.7);
+  --preview-bg: #ffffff;
+  --preview-text: #1a1a1a;
+  --preview-border: #e0e0e0;
+  --preview-th-bg: #f5f5f5;
+}
+
+/* 暗色主题 */
+[data-theme="dark"] {
   --bg-primary: #0f0f14;
   --bg-secondary: #16161e;
   --bg-tertiary: #1c1c27;
@@ -10,8 +52,8 @@
   --text-primary: #e8e8ed;
   --text-secondary: #9898a8;
   --text-muted: #6b6b7b;
-  --accent: #6366f1;
-  --accent-hover: #818cf8;
+  --accent: #818cf8;
+  --accent-hover: #a5b4fc;
   --accent-subtle: rgba(99, 102, 241, 0.12);
   --accent-glow: rgba(99, 102, 241, 0.25);
   --success: #22c55e;
@@ -20,15 +62,16 @@
   --warning-subtle: rgba(245, 158, 11, 0.12);
   --error: #ef4444;
   --error-subtle: rgba(239, 68, 68, 0.12);
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --code-bg: #1c1c27;
+  --code-text: #c9d1d9;
+  --loading-backdrop: rgba(15, 15, 20, 0.7);
+  --preview-bg: #1e1e2a;
+  --preview-text: #d4d4dc;
+  --preview-border: #3a3a4a;
+  --preview-th-bg: #26263a;
 }
 
 *, *::before, *::after {
@@ -49,6 +92,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background 0.35s ease, color 0.35s ease;
 }
 
 /* ===== App Container ===== */
@@ -66,21 +110,33 @@ body {
   margin-bottom: 28px;
 }
 
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
 .logo {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 6px;
 }
 
 .logo h1 {
   font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #c7d2fe, #818cf8, #6366f1);
+  background: linear-gradient(135deg, #4f46e5, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: -0.02em;
+}
+
+[data-theme="dark"] .logo h1 {
+  background: linear-gradient(135deg, #c7d2fe, #818cf8, #6366f1);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .subtitle {
@@ -88,6 +144,49 @@ body {
   font-size: 0.875rem;
   font-weight: 400;
   margin-left: 46px;
+}
+
+/* ===== Theme Toggle Button ===== */
+.btn-theme {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.btn-theme:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-subtle);
+  transform: rotate(15deg);
+}
+
+/* 浅色主题: 显示月亮（点击切暗色），隐藏太阳 */
+.btn-theme .icon-sun {
+  display: none;
+}
+
+.btn-theme .icon-moon {
+  display: block;
+}
+
+/* 暗色主题: 显示太阳（点击切浅色），隐藏月亮 */
+[data-theme="dark"] .btn-theme .icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .btn-theme .icon-moon {
+  display: none;
 }
 
 /* ===== Main Content ===== */
@@ -107,6 +206,8 @@ body {
   padding: 24px;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .panel-left {
@@ -486,12 +587,13 @@ body {
 
 .preview-frame {
   padding: 20px;
-  background: #fff;
+  background: var(--preview-bg);
   border-radius: var(--radius-md);
-  color: #1a1a1a;
+  color: var(--preview-text);
   font-size: 14px;
   line-height: 1.7;
   min-height: 100%;
+  transition: background 0.35s ease, color 0.35s ease;
 }
 
 .preview-frame h1 { font-size: 2em; margin: 0.67em 0; }
@@ -501,23 +603,24 @@ body {
 .preview-frame p { margin: 0.5em 0; }
 .preview-frame ul, .preview-frame ol { margin: 0.5em 0; padding-left: 2em; }
 .preview-frame table { border-collapse: collapse; margin: 1em 0; width: 100%; }
-.preview-frame th, .preview-frame td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
-.preview-frame th { background: #f5f5f5; font-weight: 600; }
+.preview-frame th, .preview-frame td { border: 1px solid var(--preview-border); padding: 8px 12px; text-align: left; }
+.preview-frame th { background: var(--preview-th-bg); font-weight: 600; }
 .preview-frame img { max-width: 100%; height: auto; }
-.preview-frame a { color: #6366f1; }
+.preview-frame a { color: var(--accent); }
 
 .source-code {
   padding: 20px;
-  background: var(--bg-tertiary);
+  background: var(--code-bg);
   border-radius: var(--radius-md);
   font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
   font-size: 0.8125rem;
   line-height: 1.7;
-  color: #c9d1d9;
+  color: var(--code-text);
   white-space: pre-wrap;
   word-break: break-all;
   min-height: 100%;
   tab-size: 2;
+  transition: background 0.35s ease, color 0.35s ease;
 }
 
 /* ===== Messages Bar ===== */
@@ -556,12 +659,12 @@ body {
 
 .message-item.warning {
   background: var(--warning-subtle);
-  color: #fbbf24;
+  color: var(--warning);
 }
 
 .message-item.error {
   background: var(--error-subtle);
-  color: #f87171;
+  color: var(--error);
 }
 
 /* ===== Toast ===== */
@@ -591,14 +694,14 @@ body {
 
 .toast.success {
   border-color: var(--success);
-  background: linear-gradient(135deg, var(--bg-elevated), rgba(34, 197, 94, 0.08));
+  background: linear-gradient(135deg, var(--bg-elevated), var(--success-subtle));
 }
 
 /* ===== Loading Overlay ===== */
 .loading-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 15, 20, 0.7);
+  background: var(--loading-backdrop);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -673,9 +776,3 @@ body {
     margin-top: 8px;
   }
 }
-
-/* ===== Syntax Highlighting for Source Code ===== */
-.source-code .tag { color: #7ee787; }
-.source-code .attr-name { color: #d2a8ff; }
-.source-code .attr-value { color: #a5d6ff; }
-.source-code .comment { color: #6b7280; }
